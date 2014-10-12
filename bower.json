@@ -1,0 +1,24 @@
+{
+  "name": "firebase-chartjs-demo",
+  "version": "0.0.1",
+  "authors": [
+    "kyung yeol kim <chitacan@gmail.com>"
+  ],
+  "description": "chartjs with firebase backend",
+  "main": "index.js",
+  "keywords": [
+    "firebase",
+    "chart.js"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chartjs": "1.0.1-beta.4"
+  }
+}

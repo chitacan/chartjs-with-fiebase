@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <input id="init" type="button" value="init" />
+  <ul id="vote"></ul>
+  <script src="https://cdn.firebase.com/js/client/1.1.1/firebase.js"></script>
+  <script type="text/javascript">
+    var fb = new Firebase(YOUR_FIREBASE_URL);
+    var chartRef = fb.child('chart_1');
+    var dataRef  = fb.child('chart_1-data');
+    var INITIAL_DATA = [
+      { value:1, color:"#F7464A", highlight:"#FF5A5E", label: "Red"    },
+      { value:1, color:"#46BFBD", highlight:"#5AD3D1", label: "Green"  },
+      { value:1, color:"#FDB45C", highlight:"#FFC870", label: "Yellow" }
+    ];
+    var ID;
+
+    var init = document.getElementById('init')
+      , vote = document.getElementById('vote')
+
+    init.addEventListener('click', function() {
+      chartRef.set(INITIAL_DATA);
+    });
+
+    chartRef.on('value', onChartData);
+
+    function onChartData(snap) {
+      var data = snap.val();
+      init.style.display = !!data ? 'none' : 'block';
+      if (!data) return;
+
+      if (vote.childElementCount == 0) {
+        data.forEach(function(item) {
+          var div = document.createElement('div')
+            , li  = document.createElement('li')
+            , btn = document.createElement('input')
+
+          div.textContent = item.label;
+          btn.setAttribute('type', 'button');
+          btn.value = 'vote'
+          btn.id = item.label;
+          btn.addEventListener('click', function() {
+            dataRef.child(this.id).push({
+              value: 1,
+              timestamp: Firebase.ServerValue.TIMESTAMP
+            }).setPriority(Firebase.ServerValue.TIMESTAMP);
+          });
+
+          li.appendChild(div);
+          li.appendChild(btn);
+          vote.appendChild(li);
+        });
+      }
+    }
+
+  </script>
+</body>
+</html>
