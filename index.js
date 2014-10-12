@@ -13,6 +13,7 @@ chartRef.endAt(timestamp).once('value', function(snap) {
   snap.val().forEach(function(item, idx) {
     chart.addData(item);
     seg = chart.segments[idx];
+    seg.data = [];
 
     var childRef = dataRef.child(item.label);
     childRef.endAt(timestamp).once('value', onChartData.bind(seg));
@@ -21,22 +22,29 @@ chartRef.endAt(timestamp).once('value', function(snap) {
 });
 
 function onVoted(snap) {
-  updateChart(this, snap.val().value);
+  this.data.push(snap.val());
+  updateChart();
 }
 
 function onChartData(snap) {
   if (!snap.val()) return;
 
-  var val = 0;
+  var self = this;
   snap.forEach(function(item) {
-    val += item.val().value;
+    self.data.push(item.val())
   });
-  updateChart(this, val);
+  updateChart();
 }
 
-function updateChart(segment, value) {
+function updateChart() {
   setTimeout(function() {
-    segment.value += value;
+    chart.segments.forEach(function(item) {
+      var data = item.data;
+      while(data.length) {
+        item.value += data.pop().value;
+      }
+    });
+
     chart.update();
   }, 100)
 }
