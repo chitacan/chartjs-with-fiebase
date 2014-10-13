@@ -19,3 +19,7 @@ var chartRef = fb.child('chart_1');
 ```
 * Run `bower install`
 * Fire up an local server & hacking it !!
+
+## Demo
+
+see [Demo](https://brilliant-inferno-8964.firebaseapp.com).
